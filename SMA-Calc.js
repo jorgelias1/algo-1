@@ -1,7 +1,8 @@
 const fs = require('fs')
 
-fs.readFile('spy-data.json', 'utf8', (err, data)=>{
+fs.readFile('spy.json', 'utf8', (err, data)=>{
     const arr = JSON.parse(data)
+    // calculate the 200-day Simple Moving Avg
     let sum = [];
     arr.forEach((day, index)=>{
         sum.push(Number(day.Close));
@@ -15,7 +16,7 @@ fs.readFile('spy-data.json', 'utf8', (err, data)=>{
         }
     })
     const newData = JSON.stringify(arr, null, 2);
-    fs.writeFile('spy-data.json', newData, err=>{
+    fs.writeFile('spy.json', newData, err=>{
         if (err){
             console.log(err)
         } else{
