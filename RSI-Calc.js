@@ -19,7 +19,7 @@ const calcRSI_MA = (currentDay, arr) =>{
     const RSI_MA = sum/14
     return RSI_MA;
 }
-fs.readFile('spy.json', 'utf8', (err, data)=>{
+fs.readFile('c.json', 'utf8', (err, data)=>{
     const arr = JSON.parse(data)
     // Calculate the 14-day Relative Strength Index
     let gains = [];
@@ -55,7 +55,7 @@ fs.readFile('spy.json', 'utf8', (err, data)=>{
             arr[currentDay].RSI_MA = calcRSI_MA(currentDay, arr);
         }
     }
-    fs.writeFile('spy.json', JSON.stringify(arr, null, 2), err=>{
+    fs.writeFile('c.json', JSON.stringify(arr, null, 2), err=>{
         if (err){
             console.log(err)
         } else {
