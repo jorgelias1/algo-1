@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-fs.readFile('hood.json', 'utf8', (err, data)=>{
+fs.readFile('spy.json', 'utf8', (err, data)=>{
     const arr = JSON.parse(data)
     // calculate the 50-day Simple Moving Avg
     let sum = [];
@@ -16,7 +16,7 @@ fs.readFile('hood.json', 'utf8', (err, data)=>{
         }
     })
     const newData = JSON.stringify(arr, null, 2);
-    fs.writeFile('hood.json', newData, err=>{
+    fs.writeFile('spy.json', newData, err=>{
         if (err){
             console.log(err)
         } else{

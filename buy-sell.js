@@ -1,8 +1,8 @@
 const fs = require('fs')
-
+const {getTrades, postTrades, postSPY} = require('./react/src/services/trades.cjs')
 fs.readFile('spy.json', 'utf8', (err, data)=>{
     const arr = JSON.parse(data)
-    // const arr = init.slice(7*init.length/8, init.length)
+    // const arr = init.slice(18.5*init.length/20, init.length)
     const trades = [];
     let currentAcctValue = 1;
     let b = 0;
@@ -16,13 +16,12 @@ fs.readFile('spy.json', 'utf8', (err, data)=>{
             ){  
                 const purchaseDate = currentDay+1;
                 if (tradeCount > 0){
+                    // if the trade is possible
                     const previousTradeEnd = trades[tradeCount-1].tradeEndIndex;
                     if (previousTradeEnd <= purchaseDate){
                         if (arr[purchaseDate+1]){
                             trades.push({buyPrice: arr[purchaseDate].Close, openDate: arr[purchaseDate].Date});
-                            // interesting. the larger the gap, the larger the return?
-                            // see returns by year
-                            // if returns continue to seem too good to be true, try on other stocks.  
+
                             for (let i = purchaseDate+1, j = arr.length; i<j;i++){
                                 // adjust criteria for selling
                                 if (arr[i]){
@@ -37,14 +36,16 @@ fs.readFile('spy.json', 'utf8', (err, data)=>{
                                     trades[tradeCount].sellPrice = arr[i].Close;
                                     trades[tradeCount].closeDate = arr[i].Date;
                                     trades[tradeCount].tradeEndIndex = i;
-                                    trades[tradeCount].type='buy';
+                                    trades[tradeCount].type='long';
+                                    trades[tradeCount].ticker='NASDAQ'
                                     tradeCount++;
                                     break;
                                     } else if (i===arr.length-1){
                                         trades[tradeCount].sellPrice = arr[i].Close;
                                         trades[tradeCount].closeDate = arr[i].Date;
                                         trades[tradeCount].tradeEndIndex = i;
-                                        trades[tradeCount].type='buy';
+                                        trades[tradeCount].type='long';
+                                        trades[tradeCount].ticker='NASDAQ'
                                         tradeCount++;
                                         break;
                                     }
@@ -62,7 +63,8 @@ fs.readFile('spy.json', 'utf8', (err, data)=>{
                             trades[tradeCount].sellPrice = arr[i+1].Close;
                             trades[tradeCount].closeDate = arr[i+1].Date;
                             trades[tradeCount].tradeEndIndex = i+1;
-                            trades[tradeCount].type='buy';
+                            trades[tradeCount].type='long';
+                            trades[tradeCount].ticker='NASDAQ'
                             tradeCount++;
                             break;
                         }
@@ -87,9 +89,11 @@ fs.readFile('spy.json', 'utf8', (err, data)=>{
                             for (let i = purchaseDate, j = arr.length; i<j;i++){
                                 // adjust criteria for selling
                                 if (arr[i].Close > arr[i].fiftyMA){
-                                    trades[tradeCount].buyPrice = arr[i+1].Close;
-                                    trades[tradeCount].closeDate = arr[i+1].Date;
-                                    trades[tradeCount].tradeEndIndex = i+1;
+                                    trades[tradeCount].buyPrice = arr[i].Close;
+                                    trades[tradeCount].closeDate = arr[i].Date;
+                                    trades[tradeCount].tradeEndIndex = i;
+                                    trades[tradeCount].type='short'
+                                    trades[tradeCount].ticker='NASDAQ'
                                     tradeCount++;
                                     break;
                                 }
@@ -97,6 +101,8 @@ fs.readFile('spy.json', 'utf8', (err, data)=>{
                                     trades[tradeCount].buyPrice = arr[i].Close;
                                     trades[tradeCount].closeDate = arr[i].Date;
                                     trades[tradeCount].tradeEndIndex = i;
+                                    trades[tradeCount].type='short'
+                                    trades[tradeCount].ticker='NASDAQ'
                                     tradeCount++;
                                     break;
                                 }
@@ -119,7 +125,7 @@ fs.readFile('spy.json', 'utf8', (err, data)=>{
             console.log(trade)
         }
         if (trade.sellPrice - trade.buyPrice > 0){
-            if (trade.type==='buy'){
+            if (trade.type==='long'){
                 longWs++;
             }
             else{
@@ -133,24 +139,18 @@ fs.readFile('spy.json', 'utf8', (err, data)=>{
         }
     }
     })
-    console.log(trades)
+    // console.log(trades)
 
     console.log('wins:',longWs, 'losses:', trades.length-(shortWs+longWs))
     // console.log(trades.slice(trades.length-10, trades.length))
     // console.log(trades.slice(0, 1))
     console.log(trades.length)
     console.log(currentAcctValue);
-    // next, see if there's a pt where the slope goes from pos to neg.
-    // if so, sell. 
 
-    // for now, if 2 consecutive ones of the same type are encountered,
-    // no trade.
-
-    // calc overall change
-    const dates=[];
-    const prices=[];
-    arr.forEach(day=>{
-        dates.push(day.Date)
-        prices.push(day.Close)
-    })
+    // postTrades(trades)
+    // postSPY(arr.slice(arr.length-200, arr.length))
+    // .then(()=>{
+    //     postSPY(arr.slice(arr.length/2, arr.length))
+    // })
 })
+// getTrades('NASDAQ').then(re=>console.log(re.data))
