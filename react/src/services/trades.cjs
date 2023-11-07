@@ -1,5 +1,6 @@
 const axios = require('axios')
-const baseURL = 'http://localhost:3001'
+require('dotenv').config()
+const baseURL = process.env.BASEURL
 
 const getTrades = (ticker)=>{
     return axios.get(`${baseURL}/api/trades/${ticker}`);

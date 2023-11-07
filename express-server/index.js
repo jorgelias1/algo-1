@@ -1,6 +1,7 @@
 const express = require('express')
 const db = require('./db')
 const app = express()
+const awsServerlessExpress = require('aws-serverless-express')
 app.use(express.json())
 
 app.get('/api/trades/:ticker', async(request, response)=>{
@@ -41,7 +42,7 @@ app.get('/api/clean', async(request, response)=>{
         response.send('success')
     } catch(err){console.log(err)}
 })
-const PORT = 3001
-app.listen(PORT, () => {
-console.log(`Server running on port ${PORT}`)
-})
+const server = awsServerlessExpress.createServer(app);
+exports.handler = (event, context) => {
+  awsServerlessExpress.proxy(server, event, context);
+}
