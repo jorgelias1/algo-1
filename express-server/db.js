@@ -28,10 +28,10 @@ const postTrades = async(trades)=>{
         try{
             await pool.query(query, [
                 trade.type,
-                trade.buyPrice,
-                trade.sellPrice,
+                (trade.buyPrice || null),
+                (trade.sellPrice || null),
                 trade.openDate, 
-                trade.closeDate,
+                (trade.closeDate || null),
                 trade.ticker
             ])
         } catch (err){
@@ -59,7 +59,7 @@ const postSPY = async(data) =>{
     }
 }
 const getSPY = async()=>{
-    const query = `SELECT * FROM spy`
+    const query = `SELECT * FROM spy ORDER BY DATE`
     const re = await pool.query(query);
     return re;
 }

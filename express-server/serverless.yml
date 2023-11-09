@@ -1,4 +1,4 @@
-service: trade-cron
+service: algo-server
 
 provider:
   name: aws
@@ -6,8 +6,9 @@ provider:
   runtime: nodejs18.x
 
 functions:
-  cronFunction:
-    handler: execute.main
+  expressAppFunction:
+    handler: index.handler
     events:
-       - schedule:
-          rate: cron(0 13 * * 1-5)
+      - http:
+          path: /{proxy+}
+          method: ANY

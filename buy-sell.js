@@ -1,6 +1,6 @@
 const fs = require('fs')
 const {getTrades, postTrades, postSPY} = require('./react/src/services/trades.cjs')
-fs.readFile('spy.json', 'utf8', (err, data)=>{
+fs.readFile('meta.json', 'utf8', (err, data)=>{
     const arr = JSON.parse(data)
     // const arr = init.slice(18.5*init.length/20, init.length)
     const trades = [];
