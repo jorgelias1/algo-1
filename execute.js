@@ -3,7 +3,7 @@ const dotenv = require('dotenv').config()
 const {getTrades, postTrades, getSPY, postSPY, closeTrade, cleanSPY} = require('./react/src/services/trades.cjs')
 
 // update daily
-const main = async()=>{
+exports.main = async()=>{
     const re = await getQuote();
     let today = new Date();
     today = new Date(today.getTime() - 8*60 * 60 * 1000)
@@ -17,8 +17,8 @@ const main = async()=>{
 
     // calculate necessary values
     day[0].SMA = calcSMA(day, data, 200);
-    day[0].fiftyMA = calcSMA(day, data.slice(149, 199), 50)
-    day[0].twentyMA = calcSMA(day, data.slice(179, 199), 20)
+    day[0].fiftyMA = calcSMA(day, data.slice(150, 199), 50)
+    day[0].twentyMA = calcSMA(day, data.slice(180, 199), 20)
     const change = calcChange(day, data[data.length-1]);
     day[0].avgGain = change.avgGain;
     day[0].avgLoss = change.avgLoss;
@@ -38,7 +38,7 @@ const main = async()=>{
 const checkOpen=async()=>{
     const re = await getTrades('SPY');
     const trades = re.data.rows
-    const lastTrade = trades.slice(trades.length-2, trades.length-1)
+    const lastTrade = trades.slice(trades.length-1)
     if (!lastTrade[0].close_date){
         return lastTrade
     } else{
@@ -110,31 +110,29 @@ const calcRSI_MA = (currentDay, arr, day) =>{
     const RSI_MA = sum/14
     return RSI_MA;
 }
-const checkLongOpen = (arr) =>{
-    // if open criteria is met, while close criteria is not met, return not null
+const checkLongOpen = (day) =>{
+    // if open criteria is met return not null
     if (
-        (arr[0].Close > arr[0].SMA
-        && arr[0].RSI > arr[0].RSI_MA
-        || arr[0].RSI > 60 
-        ) && !((today[0].twentyMA - arr[arr.length-1].twentyMA > 0 && today[0].twentyMA/arr[arr.length-1].twentyMA < 1.0001)
-        || arr[arr.length-1].Close/openTrade[0].buy_price >1.07 || openTrade[0].buy_price/arr[arr.length-1].Close < 0.955
-        || (todaysDate - purchaseDate)/(1000*3600*24) > 100)
+        (day[0].Close > day[0].SMA
+        && day[0].RSI > day[0].RSI_MA
+        || day[0].RSI > 60 
+        ) 
         ){  
-            arr[0].type = 'long';
-            arr[0].buyPrice = arr[0].Close;
-            arr[0].openDate = arr[0].Date;
-            arr[0].ticker = 'SPY';
-            return arr; 
+            day[0].type = 'long';
+            day[0].buyPrice = day[0].Close;
+            day[0].openDate = day[0].Date;
+            day[0].ticker = 'SPY';
+            return day; 
     }
 } 
-const checkShortOpen=(arr)=>{
+const checkShortOpen=(day)=>{
     // if open criteria is met, while close criteria is not met, return not null
-    if(arr[0].Close < arr[0].SMA && !(today[0].Close > today[0].fiftyMA)){
-        arr[0].type = 'short';
-        arr[0].sellPrice = arr[0].Close;
-        arr[0].openDate = arr[0].Date;
-        arr[0].ticker = 'SPY';
-        return arr;
+    if(day[0].Close < day[0].SMA && !(day[0].Close > day[0].fiftyMA)){
+        day[0].type = 'short';
+        day[0].sellPrice = day[0].Close;
+        day[0].openDate = day[0].Date;
+        day[0].ticker = 'SPY';
+        return day;
     }
 }
 const checkLongClose = (today, arr, openTrade)=>{
@@ -157,4 +155,4 @@ const checkShortClose = (today)=>{
     }
 }
        
-main();
+// main();

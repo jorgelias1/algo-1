@@ -1,4 +1,4 @@
-service: algo-rs
+service: algorithm
 
 provider:
   name: aws

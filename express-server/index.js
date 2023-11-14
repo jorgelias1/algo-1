@@ -1,7 +1,9 @@
 const express = require('express')
 const db = require('./db')
+const cors = require('cors');
 const app = express()
 const awsServerlessExpress = require('aws-serverless-express')
+app.use(cors());
 app.use(express.json())
 
 app.get('/api/trades/:ticker', async(request, response)=>{

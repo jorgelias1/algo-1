@@ -1,4 +1,4 @@
-service: algo-server
+service: algo-server-x
 
 provider:
   name: aws

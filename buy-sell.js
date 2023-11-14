@@ -1,8 +1,8 @@
 const fs = require('fs')
 const {getTrades, postTrades, postSPY} = require('./react/src/services/trades.cjs')
-fs.readFile('meta.json', 'utf8', (err, data)=>{
+fs.readFile('nasdaq.json', 'utf8', (err, data)=>{
     const arr = JSON.parse(data)
-    // const arr = init.slice(18.5*init.length/20, init.length)
+    // const arr = init.slice(16.9*init.length/20, init.length)
     const trades = [];
     let currentAcctValue = 1;
     let b = 0;
@@ -143,7 +143,7 @@ fs.readFile('meta.json', 'utf8', (err, data)=>{
 
     console.log('wins:',longWs, 'losses:', trades.length-(shortWs+longWs))
     // console.log(trades.slice(trades.length-10, trades.length))
-    // console.log(trades.slice(0, 1))
+    console.log(trades.slice(0, 1))
     console.log(trades.length)
     console.log(currentAcctValue);
 
