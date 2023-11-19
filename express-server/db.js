@@ -15,7 +15,7 @@ const pool = new pg.Pool({
 });
 
 const getTrades = async(ticker)=>{
-    const query = 'SELECT * FROM algo_trades WHERE ticker = $1'
+    const query = 'SELECT * FROM algo_trades WHERE ticker = $1 ORDER BY open_date'
     const re = await pool.query(query, [ticker.ticker]);
     return re
 }

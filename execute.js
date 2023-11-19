@@ -28,10 +28,14 @@ exports.main = async()=>{
     // add day to db, remove unneccessary day 
     await postSPY(day);
     await cleanSPY();
+    console.log('cleaned up + posted. Checking criteria now...')
     // if criteria is met to open trade, make the trade
     const validTrade = await checkCriteria(day, data);
-    if (validTrade){
-        makeTrade(validTrade);
+    console.log('valid trade? ->', validTrade)
+    if (validTrade.info || validTrade.close){
+        console.log('trade is valid. making trade...')
+        await makeTrade(validTrade);
+        console.log('finished. ')
     }
 }
 
@@ -66,11 +70,12 @@ const checkCriteria=async(day, data)=>{
         return {type:'short', info: short};
     }
 }
-const makeTrade=(trade)=>{
+const makeTrade=async(trade)=>{
     if (trade.close){
-        closeTrade(trade);
+        await closeTrade(trade);
     } else{
-        postTrades(trade.info.slice(0));
+        console.log('posting...')
+        await postTrades(trade.info.slice(0));
     }
 }
 const getQuote=()=>{
@@ -134,8 +139,8 @@ const checkShortOpen=(day)=>{
         day[0].ticker = 'SPY';
         return day;
     }
-}
-const checkLongClose = (today, arr, openTrade)=>{
+} 
+exports.checkLongClose = (today, arr, openTrade)=>{
     const todaysDate = new Date(today[0].Date);
     const purchaseDate = new Date(arr[arr.length-1].date)
     if ((today[0].twentyMA - arr[arr.length-1].twentyMA > 0 && today[0].twentyMA/arr[arr.length-1].twentyMA < 1.0001)
@@ -147,7 +152,7 @@ const checkLongClose = (today, arr, openTrade)=>{
         return today;
     }
 }
-const checkShortClose = (today)=>{
+exports.checkShortClose = (today)=>{
     if (today[0].Close > today[0].fiftyMA){
         today.buyPrice = today[0].Close;
         today.closeDate = today[0].Date;

@@ -153,4 +153,5 @@ fs.readFile('nasdaq.json', 'utf8', (err, data)=>{
     //     postSPY(arr.slice(arr.length/2, arr.length))
     // })
 })
+
 // getTrades('NASDAQ').then(re=>console.log(re.data))

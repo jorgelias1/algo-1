@@ -1,4 +1,4 @@
-service: algorithm
+service: algorithm-4
 
 provider:
   name: aws

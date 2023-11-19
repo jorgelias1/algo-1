@@ -23,61 +23,25 @@ const Check=()=>{
 }
 
 const BacktestCard=()=>{
+  const data=[
+    ['Ticker','GOOG', 'META', 'GME', 'SPY', 'NASDAQ'],
+    ['IPO Change','92.6x', '16.14x', '16.01x', '21.03x', '224.0x'],
+    ['Actual Change','92.6x', '16.14x', '16.01x', '21.03x', '224.0x'],
+    ['% Outperform','92.6x', '16.14x', '16.01x', '21.03x', '224.0x']
+  ]
   return(
     <div className='companies'>
             <div className='cardTitle'>Backtest Highlights</div>
             <table>
-              <thead>
-                <tr>
-                    <th>
-                      Ticker
-                    </th>
-                    <th>
-                      IPO change
-                    </th>
-                </tr>
-              </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <Check/>GOOG
-                  </td>
-                  <td>
-                    92.6x
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                  <Check/>META
-                  </td>
-                  <td>
-                      16.14x
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                  <Check/>GME
-                  </td>
-                  <td>
-                      16.01x
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                  <Check/>SPY
-                  </td>
-                  <td>
-                      21.03x
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                  <Check/>NASDAQ
-                  </td>
-                  <td>
-                      224.0x
-                  </td>
-                </tr>
+                {data.map((row, rIndex)=>(
+                  <tr key={rIndex}>
+                    {row.map((cell, cIndex)=>{
+                      const name=`row-${rIndex}`;
+                      return <td key={cIndex} className={name}>{cell}</td>
+                    })}
+                  </tr>
+                ))}
               </tbody>
             </table>
         </div>
@@ -189,30 +153,30 @@ const MainContents=()=>{
     setStats(getTradeStats(trades));
   }
   return(
-    <div className='container'>
-      <div style={{position:'absolute',width:'80vw', height:'0.4vh', background:'linear-gradient(to right, white, transparent)', top:'15%', left:'10%'}}></div>
-      <div style={{position:'absolute',width:'0.4vh', height:'40vw', background:'linear-gradient(to bottom, white, transparent)', top:'15%', left:'10%'}}></div>
+    <div className='container' style={{height:'100%'}}>
+      <div style={{position:'absolute',width:'80vw', height:'0.4vh', background:'linear-gradient(to right, white, transparent)', top:'15%', left:'6%'}}></div>
+      <div style={{position:'absolute',width:'0.4vh', height:'40vw', background:'linear-gradient(to bottom, white, transparent)', top:'15%', left:'6%'}}></div>
       {stats && <Performance winCount={stats.winCount} lossCount={stats.lossCount} avgPctReturn={stats.avgPctReturn} tradeCount={stats.tradeCount} setStats={setStats}/>}
       <div className='flexV'>
         <div className='mainContents'>
           <div className='primary'>
-            <h1 style={{fontWeight:'800'}}>
+            <h1 className='title'>
               <div>Crazy simple.</div>
               <div>Crazy returns.</div>
             </h1>
             <p className='textBody'>
               Based on up to 50 years of data per security, the TA-based algorithm has outperformed major indices like the S&P500 and the NASDAQ on various time scales, including all-time and 3yrs in backtests. This site is designed to track the performance of my algorithm in real-time, by paper trading.
             </p>
-          </div>
-          <div className='buttons'>
+            <div className='buttons'>
             <button className='primaryBtn' onClick={navBacktesting}>Backtesting Performance <Arrow/></button>
             <button className='secondaryBtn' onClick={navCurrent}>Current Performance <Arrow/></button>
           </div>
+          </div>
           <BacktestCard/>
-          <Stats/>
         </div>
+        <Stats/>
       </div>
-      <svg className='chartAnimation' xmlns="http://www.w3.org/2000/svg" viewBox="2.3 -10.2 19.5 13.8" style={{height:'100vh', width:'100vw', transform:'scale(1.1)'}}>
+      <svg className='chartAnimation' xmlns="http://www.w3.org/2000/svg" viewBox="2.3 -10.2 19.5 13.8" style={{minHeight:'100vh', width:'100vw', transform:'scale(1.1)'}}>
         <defs>
           <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" style={{stopColor:'rgb(20,0,130)', stopOpacity:'1'}} />
@@ -227,7 +191,7 @@ const MainContents=()=>{
 
 const App=()=>{
   return (
-    <div className='bg' style={{overflow:'hidden', width:'100vw', height:'100vh'}}>
+    <div className='bg' style={{overflow:'hidden', width:'100vw'}}>
     <MainContents/>
     </div>
   )
