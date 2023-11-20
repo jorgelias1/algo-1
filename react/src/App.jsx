@@ -25,9 +25,9 @@ const Check=()=>{
 const BacktestCard=()=>{
   const data=[
     ['Ticker','GOOG', 'META', 'GME', 'SPY', 'NASDAQ'],
-    ['IPO Change','92.6x', '16.14x', '16.01x', '21.03x', '224.0x'],
-    ['Actual Change','92.6x', '16.14x', '16.01x', '21.03x', '224.0x'],
-    ['% Outperform','92.6x', '16.14x', '16.01x', '21.03x', '224.0x']
+    ['IPO Backtest','92.6x', '16.14x', '16.01x', '21.03x', '224.0x'],
+    ['Actual Change','50.72x', '9.85x', '7.76x', '17.95x', '140.10x'],
+    ['% Outperform','83%', '64%', '106%', '17%', '60%']
   ]
   return(
     <div className='companies'>
