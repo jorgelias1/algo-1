@@ -1,1 +1,2 @@
 # algo-1
+Hello! This project is a web app designed to display the performance of a trading algorithm (logic is included here) that currently just tracks the publicly-traded SPY ETF. The frontend of this web app is designed to make it easy to visualize how the algorithm is doing in a visually appealing manner. The algorithm itself is preliminary, and meant to be modified in the future. Mostly, the purpose was to prove that I could create something that appears to be semi-profitable, and be able to continually improve upon the strategy. 
